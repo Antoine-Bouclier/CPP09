@@ -15,6 +15,7 @@ class BitcoinExchange
 		std::map<std::string, double>	_data;
 
 		BitcoinExchange();
+		void	initData();
 		bool	isDateValid(const std::string& date_str);
 		bool	isValueValid(const std::string& val_str);
 		void	processInput(const char* path);
