@@ -3,28 +3,39 @@
 
 #include <iostream>
 #include <map>
-#include <exception>
 #include <fstream>
 #include <sstream>
-
-#include <sys/stat.h>
 
 class BitcoinExchange
 {
 	private:
-		std::map<std::string, double>	_data;
+		std::map<std::string, double>	data;
 
 		BitcoinExchange();
-		void	initData();
-		bool	isDateValid(const std::string& date_str);
-		bool	isValueValid(const std::string& val_str);
-		void	processInput(const char* path);
+		void			parseData();
+		bool			isValidDate(const std::string date_str);
+		bool			isValidValue(const std::string value_str);
 	public:
+		~BitcoinExchange();
 		BitcoinExchange(const std::string& file);
 		BitcoinExchange(const BitcoinExchange& copy);
 		BitcoinExchange	&operator=(const BitcoinExchange& copy);
-		~BitcoinExchange();
-};
 
+		class ErrorException : public std::exception
+		{
+			private:
+				std::string	_message;
+			public:
+				ErrorException(std::string const& message) : _message("ERROR: " + message) {}
+				ErrorException(std::string const& message, unsigned int line) 
+				{
+					std::stringstream ss;
+					ss << "ERROR [line " << line << "]: " << message;
+					_message = ss.str();
+				}
+				virtual const char* what() const throw() { return _message.c_str(); }
+				virtual ~ErrorException() throw() {}
+		};
+};
 
 #endif

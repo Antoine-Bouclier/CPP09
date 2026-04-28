@@ -4,8 +4,16 @@ int	main(int argc, char **argv)
 {
 	if (argc == 2)
 	{
-		
+		try
+		{
+			BitcoinExchange	btc(argv[1]);
+		}
+		catch(const std::exception& e)
+		{
+			std::cerr << e.what() << '\n';
+		}
+		return (1);
 	}
-	std::cout << "Error: could not open file." << std::endl;
+	std::cout << "well done" << std::endl;
 	return (1);
 }

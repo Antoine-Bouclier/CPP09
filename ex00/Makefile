@@ -1,12 +1,12 @@
 NAME		=	btc
-CC			=	c++
-CFLAGS		=	-Wall -Wextra -Werror -std=c++98 -MMD -MP
+CXX			=	c++
+CXXFLAGS		=	-Wall -Wextra -Werror -std=c++98 -MMD -MP
 
 SRC_DIR		=	src/
 OBJ_DIR		=	obj/
 INC_DIR		=	inc/
 
-SRC_FILES	=	main.cpp 
+SRC_FILES	=	main.cpp BitcoinExchange.cpp
 OBJ_FILES	=	$(SRC_FILES:.cpp=.o)
 DEP_FILES	=	$(OBJ_FILES:.o=.d)
 
@@ -17,11 +17,11 @@ DEP			=	$(addprefix $(OBJ_DIR), $(DEP_FILES))
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	$(CC) $(CFLAGS) $(OBJ) -o $(NAME)
+	$(CXX) $(CXXFLAGS) $(OBJ) -o $(NAME)
 
 $(OBJ_DIR)%.o: $(SRC_DIR)%.cpp
 	@mkdir -p $(OBJ_DIR)
-	$(CC) $(CFLAGS) -I $(INC_DIR) -o $@ -c $<
+	$(CXX) $(CXXFLAGS) -I $(INC_DIR) -o $@ -c $<
 
 clean:
 	@if [ -d "$(OBJ_DIR)" ]; then \
