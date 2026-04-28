@@ -63,8 +63,29 @@ void	BitcoinExchange::parseData()
 
 bool	BitcoinExchange::isValidDate(const std::string date_str)
 {
-	(void)date_str;
-	return (true);
+	size_t	first = date_str.find('-');
+	size_t	last = date_str.rfind('-');
+
+	if (first != std::string::npos && last != std::string::npos)
+	{
+		std::stringstream ss(date_str.substr(0, first - 1));
+		unsigned int	num;
+		if (!(ss >> num))
+			return (false);
+		if (num < 0 || num > 9999)
+			return (false);
+
+		
+		std::string	year = date_str.substr(0, first - 1);
+		std::string	month = date_str.substr(first + 1, last - 1);
+		std::string	day = date_str.substr(last + 1);
+	}
+	return (false);
+}
+
+void	BitcoinExchange::stoi(const std::string value)
+{
+	
 }
 
 bool	BitcoinExchange::isValidValue(const std::string value_str)
