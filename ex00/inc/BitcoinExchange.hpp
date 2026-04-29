@@ -12,13 +12,16 @@ class BitcoinExchange
 		std::map<std::string, double>	data;
 
 		BitcoinExchange();
-		void			parseData();
-		bool			isValidDate(const std::string date_str);
-		bool			isValidValue(const std::string value_str);
-		int	stoi(const std::string str);
-		bool			isValidYear(const std::string year);
-		bool			isValidMonth(const std::string month);
-		bool			isValidDay(const std::string year, const std::string month, const std::string day);
+		void									parseData();
+		bool									isValidDate(const std::string date_str);
+		bool									isValidValue(const std::string value_str);
+		int										stoi(const std::string str);
+		bool									isValidYear(const std::string year);
+		bool									isValidMonth(const std::string month);
+		bool									isValidDay(const std::string year, const std::string month, const std::string day);
+		void									processInput(const std::string& filename);
+		std::map<std::string, double>::iterator	search(const std::string date);
+		void									printResult(std::map<std::string, double>::iterator it, double val);
 	public:
 		~BitcoinExchange();
 		BitcoinExchange(const std::string& file);
