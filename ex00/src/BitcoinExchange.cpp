@@ -65,11 +65,13 @@ bool	BitcoinExchange::isValidDate(const std::string date_str)
 	size_t	first = date_str.find('-');
 	size_t	last = date_str.rfind('-');
 
-	if (first != std::string::npos && last != std::string::npos)
+	if (first == std::string::npos || last == std::string::npos || first == last)
 	{
 		std::string	year = date_str.substr(0, first);
 		std::string	month = date_str.substr(first + 1, last - first - 1);
 		std::string	day = date_str.substr(last + 1);
+		if (year.size() != 4 || month.size() != 2 || day.size() != 2)
+			return (false);
 		if (!isValidYear(year) || !isValidMonth(month) || !isValidDay(year, month, day))
 			return (false);
 	}
@@ -78,15 +80,27 @@ bool	BitcoinExchange::isValidDate(const std::string date_str)
 
 bool	BitcoinExchange::isValidValue(const std::string value_str)
 {
-	(void)value_str;
+	std::stringstream ss(value_str);
+	double	val;
+	if (!(ss >> val))
+		return (false);
+	else if (val < 0)
+		return (false);
+
+	std::string extra;
+	if (ss >> extra)
+		return (false);
 	return (true);
 }
 
 int			BitcoinExchange::stoi(const std::string str)
 {
 	std::stringstream ss(str);
-	unsigned int	num;
+	int	num;
 	if (!(ss >> num))
+		return (-1);
+	std::string extra;
+	if (ss >> extra)
 		return (-1);
 	return (num);
 }
@@ -94,7 +108,7 @@ int			BitcoinExchange::stoi(const std::string str)
 bool			BitcoinExchange::isValidYear(const std::string year)
 {
 	int	num = stoi(year);
-	if (!num || num < 0 || num > 9999)
+	if (num < 0 || num > 9999)
 		return (false);
 	return (true);
 }
