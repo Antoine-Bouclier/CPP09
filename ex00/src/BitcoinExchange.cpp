@@ -40,7 +40,7 @@ void	BitcoinExchange::parseData()
 		size_t			found = line.find(',');
 		if (found != std::string::npos)
 		{
-			std::string	date = line.substr(0, found - 1);
+			std::string	date = line.substr(0, found);
 			std::string	value = line.substr(found + 1);
 			
 			if (!isValidDate(date))
@@ -49,7 +49,6 @@ void	BitcoinExchange::parseData()
 				throw ErrorException("Invalid value in data.csv: Requires a float or positive integer", count);
 			else
 			{
-				std::cout << value << std::endl;
 				std::stringstream ss(value);
 				double val;
 				if (!(ss >> val))
@@ -68,28 +67,62 @@ bool	BitcoinExchange::isValidDate(const std::string date_str)
 
 	if (first != std::string::npos && last != std::string::npos)
 	{
-		std::stringstream ss(date_str.substr(0, first - 1));
-		unsigned int	num;
-		if (!(ss >> num))
-			return (false);
-		if (num < 0 || num > 9999)
-			return (false);
-
-		
-		std::string	year = date_str.substr(0, first - 1);
-		std::string	month = date_str.substr(first + 1, last - 1);
+		std::string	year = date_str.substr(0, first);
+		std::string	month = date_str.substr(first + 1, last - first - 1);
 		std::string	day = date_str.substr(last + 1);
+		if (!isValidYear(year) || !isValidMonth(month) || !isValidDay(year, month, day))
+			return (false);
 	}
-	return (false);
-}
-
-void	BitcoinExchange::stoi(const std::string value)
-{
-	
+	return (true);
 }
 
 bool	BitcoinExchange::isValidValue(const std::string value_str)
 {
 	(void)value_str;
+	return (true);
+}
+
+int			BitcoinExchange::stoi(const std::string str)
+{
+	std::stringstream ss(str);
+	unsigned int	num;
+	if (!(ss >> num))
+		return (-1);
+	return (num);
+}
+
+bool			BitcoinExchange::isValidYear(const std::string year)
+{
+	int	num = stoi(year);
+	if (!num || num < 0 || num > 9999)
+		return (false);
+	return (true);
+}
+
+bool			BitcoinExchange::isValidMonth(const std::string month)
+{
+	int	num = stoi(month);
+	if (num < 0 || num > 12)
+		return (false);
+	return (true);
+}
+
+bool			BitcoinExchange::isValidDay(const std::string year, const std::string month, const std::string day)
+{
+	int	y = stoi(year);
+	int	m = stoi(month);
+	int	d = stoi(day);
+	if (d < 1 || d > 31)
+		return (false);
+	if ((m == 4 || m == 6 || m == 9 || m == 11) && d > 30)
+		return (false);
+	if (m == 2)
+	{
+		bool isLeap = (y % 4 == 0 && (y % 100 != 0 || y % 400 == 0));
+		if (isLeap && d > 29)
+			return (false);
+		else if (!isLeap && d > 28)
+			return (false);
+	}
 	return (true);
 }

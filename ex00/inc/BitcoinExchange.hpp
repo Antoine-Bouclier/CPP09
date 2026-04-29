@@ -15,7 +15,10 @@ class BitcoinExchange
 		void			parseData();
 		bool			isValidDate(const std::string date_str);
 		bool			isValidValue(const std::string value_str);
-		void			stoi(const std::string value);
+		int	stoi(const std::string str);
+		bool			isValidYear(const std::string year);
+		bool			isValidMonth(const std::string month);
+		bool			isValidDay(const std::string year, const std::string month, const std::string day);
 	public:
 		~BitcoinExchange();
 		BitcoinExchange(const std::string& file);
