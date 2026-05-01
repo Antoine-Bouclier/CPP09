@@ -26,20 +26,16 @@ void	RPN::calculate(int c)
 
 	if (c == '/')
 	{
+		if (b == 0)
+			throw std::runtime_error("Error");
 		stack.push_back(a / b);
 	}
 	else if (c == '*')
-	{
 		stack.push_back(a * b);
-	}
 	else if (c == '-')
-	{
 		stack.push_back(a - b);
-	}
 	else
-	{
 		stack.push_back(a + b);
-	}
 }
 
 RPN::RPN(const std::string& str)
@@ -75,4 +71,15 @@ RPN	&RPN::operator=(const RPN& copy)
 {
 	(void)copy;
 	return *this;
+}
+
+/* DEBUG */
+
+void	RPN::printStack()
+{
+	for (std::list<int>::iterator it = stack.begin(); it != stack.end(); ++it)
+	{
+		std::cout << " [" << *it << "]";
+	}
+	std::cout << std::endl;
 }

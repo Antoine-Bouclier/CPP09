@@ -15,6 +15,9 @@ class RPN
 		RPN();
 		bool	isOperator(int c);
 		void		calculate(int c);
+
+		/* DEBUG */
+		void	printStack();
 	public:
 		~RPN();
 		RPN(const std::string& str);
