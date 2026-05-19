@@ -14,6 +14,6 @@ int	main(int argc, char **argv)
 		}
 		return (0);
 	}
-	std::cout << "Need a file in arguement." << std::endl;
+	std::cout << "Need a file in argument." << std::endl;
 	return (1);
 }

@@ -43,7 +43,7 @@ RPN::RPN(const std::string& str)
 	for (iter it = str.begin(); it != str.end(); ++it)
 	{
 		if (*it == ' ')
-        	continue;
+			continue;
 
 		if (isdigit(*it))
 			stack.push_back(*it - 48);
