@@ -49,10 +49,33 @@ void	PmergeMe::sortPairs(std::vector<int>& container, size_t blockSize)
 				container.begin() + i + blockSize
 			);
 		}
+		/* DEBUG */
 		printBetween(i, i + 2 * blockSize);
 	}
 	std::cout << std::endl;
 	sortPairs(container, blockSize * 2);
+	pushAndInsert(container, blockSize);
+}
+
+void PmergeMe::pushAndInsert(std::vector<int>& container, size_t blockSize)
+{
+	std::vector<int>	pend;
+	std::vector<int>	main;
+
+	std::vector<int>::iterator	it = container.begin();
+
+	for (; static_cast<size_t>(std::distance(it, container.end())) >= blockSize * 2; it += 2 * blockSize)
+	{
+		pend.insert(pend.end(), it, it + blockSize);
+		main.insert(main.end(), it + blockSize, it + blockSize * 2);
+	}
+
+	if (static_cast<size_t>(std::distance(it, container.end())) >= blockSize)
+		pend.insert(pend.end(), it, it + blockSize);
+
+	main.insert(main.begin(), pend.begin(), pend.begin() + blockSize);
+
+	
 }
 
 void	PmergeMe::parseAndStore(char **arg)
