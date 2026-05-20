@@ -10,6 +10,8 @@
 #include <limits>
 #include <algorithm>
 
+typedef std::vector<int>::iterator iter;
+
 class PmergeMe
 {
 	private:
@@ -17,13 +19,6 @@ class PmergeMe
 		std::vector<int>	vec;
 
 		static const size_t	jacobsthal[30];
-
-		struct BlockComparator {
-			bool operator()(const std::vector<int>& a, const std::vector<int>& b) const
-			{
-				return a.back() < b.back();
-			}
-		};
 		
 		PmergeMe();
 		void	parseAndStore(char **arg);
@@ -31,6 +26,7 @@ class PmergeMe
 		void	print(std::string str);
 		void	printBetween(size_t first, size_t last);
 		void	pushAndInsert(std::vector<int>& container, size_t blockSize);
+		iter	customUpperBound(iter first, iter last, const int value, size_t blockSize);
 
 	public:
 		~PmergeMe();

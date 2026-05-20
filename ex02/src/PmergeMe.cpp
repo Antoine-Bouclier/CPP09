@@ -92,8 +92,18 @@ void PmergeMe::pushAndInsert(std::vector<int>& container, size_t blockSize)
 		else
 			target = jacobsthal[i];
 		last = jacobsthal[i - 1];
-		std::cout << "target: " << target << std::endl;
-		std::cout << "last: " << last << std::endl;
+		
+		size_t	insertion_count = 1;
+		for (size_t j = target; j > last; j--)
+		{
+			size_t	bound_end = j + insertion_count;
+			std::vector<int>::iterator	begin = pend.begin() + (j - 1) * blockSize;
+			std::vector<int>::iterator	end = begin + blockSize;
+
+			std::vector<int>::iterator	upper = std::upper_bound(main.begin(), );
+
+			insertion_count++;
+		}
 	}
 }
 
@@ -113,6 +123,26 @@ void	PmergeMe::parseAndStore(char **arg)
 		deque.push_back(num);
 		vec.push_back(num);
 	}
+}
+
+iter	PmergeMe::customUpperBound(iter first, iter last, const int value, size_t blockSize)
+{
+	size_t	count = std::distance(first, last) / blockSize;
+	
+	while (count != 0)
+	{
+		size_t	step = count / 2;
+		iter	mid = first + step * blockSize;
+
+		if (value < *(mid + (blockSize - 1)))
+			count = step;
+		else
+		{
+			first = mid + blockSize;
+			count  = count - step - 1;
+		}
+	}
+	return (first);
 }
 
 void	PmergeMe::print(std::string str)
