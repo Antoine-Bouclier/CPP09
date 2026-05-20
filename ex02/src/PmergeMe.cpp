@@ -68,7 +68,7 @@ void PmergeMe::pushAndInsert(std::vector<int>& container, size_t blockSize)
 	std::vector<int>	pend;
 	std::vector<int>	main;
 
-	std::vector<int>::iterator	it = container.begin();
+	iter	it = container.begin();
 
 	for (; static_cast<size_t>(std::distance(it, container.end())) >= blockSize * 2; it += 2 * blockSize)
 	{
@@ -85,6 +85,7 @@ void PmergeMe::pushAndInsert(std::vector<int>& container, size_t blockSize)
 	size_t	last;
 	size_t	nb_blocks = pend.size() / blockSize;
 
+	size_t	insertion_count = 1;
 	for (int i = 1; i < 30 && jacobsthal[i - 1] < nb_blocks; i++)
 	{
 		if (jacobsthal[i] > nb_blocks)
@@ -93,15 +94,15 @@ void PmergeMe::pushAndInsert(std::vector<int>& container, size_t blockSize)
 			target = jacobsthal[i];
 		last = jacobsthal[i - 1];
 		
-		size_t	insertion_count = 1;
 		for (size_t j = target; j > last; j--)
 		{
 			size_t	bound_end = j + insertion_count;
-			std::vector<int>::iterator	begin = pend.begin() + (j - 1) * blockSize;
-			std::vector<int>::iterator	end = begin + blockSize;
+			iter	begin = pend.begin() + (j - 1) * blockSize;
+			iter	end = begin + blockSize;
 
-			std::vector<int>::iterator	upper = std::upper_bound(main.begin(), );
+			iter	upper = customUpperBound(main.begin() + last * blockSize, main.begin() + bound_end * blockSize, *(end - 1), blockSize);
 
+			main.insert(upper, begin, end);
 			insertion_count++;
 		}
 	}
