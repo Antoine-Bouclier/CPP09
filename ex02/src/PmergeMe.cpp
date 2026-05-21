@@ -55,10 +55,7 @@ void	PmergeMe::sortPairs(std::vector<int>& container, size_t blockSize)
 				container.begin() + i + blockSize
 			);
 		}
-		/* DEBUG */
-		printBetween(i, i + 2 * blockSize);
 	}
-	std::cout << std::endl;
 	sortPairs(container, blockSize * 2);
 	pushAndInsert(container, blockSize);
 }
@@ -67,6 +64,7 @@ void PmergeMe::pushAndInsert(std::vector<int>& container, size_t blockSize)
 {
 	std::vector<int>	pend;
 	std::vector<int>	main;
+	std::vector<int>	orphan;
 
 	iter	it = container.begin();
 
@@ -77,7 +75,12 @@ void PmergeMe::pushAndInsert(std::vector<int>& container, size_t blockSize)
 	}
 
 	if (static_cast<size_t>(std::distance(it, container.end())) >= blockSize)
+	{
 		pend.insert(pend.end(), it, it + blockSize);
+		it += blockSize;
+	}
+
+	orphan.insert(orphan.begin(), it, container.end());
 
 	main.insert(main.begin(), pend.begin(), pend.begin() + blockSize);
 
@@ -100,12 +103,17 @@ void PmergeMe::pushAndInsert(std::vector<int>& container, size_t blockSize)
 			iter	begin = pend.begin() + (j - 1) * blockSize;
 			iter	end = begin + blockSize;
 
-			iter	upper = customUpperBound(main.begin() + last * blockSize, main.begin() + bound_end * blockSize, *(end - 1), blockSize);
+			size_t	offset = bound_end * blockSize;
+			size_t	offsetSecure = (offset > main.size()) ? main.size() : offset;
+
+			iter	upper = customUpperBound(main.begin(), main.begin() + offsetSecure, *(end - 1), blockSize);
 
 			main.insert(upper, begin, end);
 			insertion_count++;
 		}
 	}
+	container.swap(main);
+	container.insert(container.end(), orphan.begin(), orphan.end());
 }
 
 void	PmergeMe::parseAndStore(char **arg)
