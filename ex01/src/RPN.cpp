@@ -64,12 +64,15 @@ RPN::RPN(const std::string& str)
 
 RPN::RPN(const RPN& copy)
 {
-	(void)copy;
+	*this = copy;
 }
 
 RPN	&RPN::operator=(const RPN& copy)
 {
-	(void)copy;
+	if (this != &copy)
+	{
+		stack.assign(copy.stack.begin(), copy.stack.end());
+	}
 	return *this;
 }
 

@@ -26,12 +26,16 @@ PmergeMe::PmergeMe(char **argv)
 
 PmergeMe::PmergeMe(const PmergeMe& copy)
 {
-	(void)copy;
+	*this = copy;
 }
 
 PmergeMe	&PmergeMe::operator=(const PmergeMe& copy)
 {
-	(void)copy;
+	if (this != &copy)
+	{
+		vec.assign(copy.vec.begin(), copy.vec.end());
+		deque.assign(copy.deque.begin(), copy.deque.end());
+	}
 	return (*this);
 }
 
@@ -160,18 +164,4 @@ void	PmergeMe::print(std::string str)
 	for (std::vector<int>::iterator it = vec.begin(); it != vec.end(); ++it)
 		std::cout << *it << ' ';
 	std::cout << std::endl;
-}
-
-void	PmergeMe::printBetween(size_t first, size_t last)
-{
-	std::cout << '[';
-	bool	space = false;
-	for (;first < last; first++)
-	{
-		if (space)
-			std::cout << ' ';
-		std::cout << vec[first];
-		space = true;
-	}
-	std::cout << "] ";
 }

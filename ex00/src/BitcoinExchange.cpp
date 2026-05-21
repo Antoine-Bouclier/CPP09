@@ -15,11 +15,15 @@ BitcoinExchange::BitcoinExchange(const std::string& file)
 }
 BitcoinExchange::BitcoinExchange(const BitcoinExchange& copy)
 {
-	(void)copy;
+	*this = copy;
 }
 BitcoinExchange	&BitcoinExchange::operator=(const BitcoinExchange& copy)
 {
-	(void)copy;
+	if (this != &copy)
+	{
+		data.clear();
+		data.insert(copy.data.begin(), copy.data.end());
+	}
 	return (*this);
 }
 

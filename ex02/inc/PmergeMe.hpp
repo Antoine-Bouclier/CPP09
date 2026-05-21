@@ -24,7 +24,6 @@ class PmergeMe
 		void	parseAndStore(char **arg);
 		void	sortPairs(std::vector<int>& container, size_t blockSize);
 		void	print(std::string str);
-		void	printBetween(size_t first, size_t last);
 		void	pushAndInsert(std::vector<int>& container, size_t blockSize);
 		iter	customUpperBound(iter first, iter last, const int value, size_t blockSize);
 
