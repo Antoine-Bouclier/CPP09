@@ -18,7 +18,6 @@ class PmergeMe
 		PmergeMe();
 		PmergeMe(const PmergeMe& copy);
 		PmergeMe	&operator=(const PmergeMe& copy);
-		~PmergeMe();
 
 		template <typename Iterator>
 		static Iterator	customUpperBound(Iterator first, Iterator last, const int value, size_t blockSize)
@@ -43,7 +42,7 @@ class PmergeMe
 
 		static const size_t	jacobsthal[22];
 	public:
-
+		~PmergeMe();
 		static void	parseAndStore(char **arg, std::vector<int>& vec, std::deque<int>& deq);
 		static void	print(std::string str, const std::vector<int> container);
 

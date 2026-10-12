@@ -20,7 +20,6 @@ class BitcoinExchange
 		bool									isValidMonth(const std::string month);
 		bool									isValidDay(const std::string year, const std::string month, const std::string day);
 		void									processInput(const std::string& filename);
-		std::map<std::string, double>::iterator	search(const std::string date);
 		void									printResult(std::map<std::string, double>::iterator it, double val);
 	public:
 		~BitcoinExchange();

@@ -4,8 +4,11 @@
 #include <iostream>
 #include <list>
 #include <exception>
+#include <climits>
+#include <limits>
+#include <cctype>
 
-typedef typename std::string::const_iterator iter;
+typedef std::string::const_iterator iter;
 
 class RPN
 {
@@ -14,10 +17,7 @@ class RPN
 
 		RPN();
 		bool	isOperator(int c);
-		void		calculate(int c);
-
-		/* DEBUG */
-		void	printStack();
+		void	calculate(int c);
 	public:
 		~RPN();
 		RPN(const std::string& str);

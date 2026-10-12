@@ -75,52 +75,59 @@ void BitcoinExchange::processInput(const std::string& filename)
 		throw ErrorException("Could not open input file");
 
 	if (!std::getline(file, line))
-		throw	ErrorException("empty input file.");
+		throw ErrorException("empty input file.");
 
 	while (std::getline(file, line))
 	{
-		size_t	found = line.find('|');
-		if (found != std::string::npos)
+		size_t found = line.find('|');
+		if (found == std::string::npos)
 		{
-			std::string	date = line.substr(0, found - 1);
-			std::string	value = line.substr(found + 2);
-			std::stringstream ss(value);
-			double	val;
-			std::string extra;
-			
-			if (!isValidDate(date))
-				std::cout << "Error: bad input => " << line << std::endl;
-			else if (!(ss >> val))
-				std::cout << "Error: bad input => " << line << std::endl;
-			else if (ss >> extra)
-				std::cout << "Error: bad input => " << line << std::endl;
-			else if (val < 0 || val > 1000)
-				std::cout << "Error: number must be between 0 and 1000" << std::endl;
+			std::cout << "Error: bad input => " << line << std::endl;
+			continue;
+		}
+
+		std::string date = line.substr(0, found);
+		std::string value = line.substr(found + 1);
+
+		size_t first = date.find_first_not_of(" \t");
+		size_t last = date.find_last_not_of(" \t");
+		if (first == std::string::npos)
+			date = "";
+		else
+			date = date.substr(first, (last - first + 1));
+
+		std::stringstream ss(value);
+		double val;
+		std::string extra;
+
+		if (!isValidDate(date))
+			std::cout << "Error: bad input => " << line << std::endl;
+		else if (!(ss >> val) || (ss >> extra))
+			std::cout << "Error: bad input => " << line << std::endl;
+		else if (val < 0)
+			std::cout << "Error: not a positive number." << std::endl;
+		else if (val > 1000)
+			std::cout << "Error: too large a number." << std::endl;
+		else
+		{
+			std::map<std::string, double>::iterator it = data.lower_bound(date);
+			if (it != data.end() && it->first == date)
+			{
+				std::cout << date << " => " << val << " = " << (val * it->second) << std::endl;
+			}
 			else
 			{
-				std::map<std::string, double>::iterator it;
-				it = data.lower_bound(date);
-				if (it != data.end() && it->first == date)
+				if (it == data.begin())
 				{
-					std::cout << date << " => " << val << " = " << (val * it->second) << std::endl;
+					std::cout << "Error: no exchange rate found for this date (too old) => " << date << std::endl;
 				}
 				else
 				{
-					if (it == data.begin())
-					{
-						std::cout << "Error: no exchange rate found for this date (too old) => " << date << std::endl;
-					}
-					else
-					{
-						--it;
-						std::cout << date << " => " << val << " = " << (val * it->second) << std::endl;
-					}
+					--it;
+					std::cout << date << " => " << val << " = " << (val * it->second) << std::endl;
 				}
-				it = data.lower_bound(date);
 			}
 		}
-		else
-			std::cout << "Error: bad input => " << line << std::endl;
 	}
 }
 
@@ -179,7 +186,7 @@ bool			BitcoinExchange::isValidYear(const std::string year)
 bool			BitcoinExchange::isValidMonth(const std::string month)
 {
 	int	num = stoi(month);
-	if (num < 0 || num > 12)
+	if (num < 1 || num > 12)
 		return (false);
 	return (true);
 }
@@ -202,13 +209,4 @@ bool			BitcoinExchange::isValidDay(const std::string year, const std::string mon
 			return (false);
 	}
 	return (true);
-}
-
-std::map<std::string, double>::iterator			BitcoinExchange::search(const std::string date)
-{
-	std::map<std::string, double>::iterator it;
-
-	it = data.lower_bound(date);
-
-	return (it);
 }
